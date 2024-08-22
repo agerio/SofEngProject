@@ -1,8 +1,13 @@
 from django.shortcuts import render
-from helloworld.models import HelloWorld
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from . models import *
+from . serializer import *
 
 # Create your views here.
-def hello_world(request):
-    textFromPsql = HelloWorld.objects.all().first().text
-    context = {'text': textFromPsql}
-    return render(request, "helloworld.html", context)
+class HelloWorldView(APIView):
+    serializer_class = HelloWorldSerializer
+
+    def get(self, request):
+        output = HelloWorld.objects.all().first().text
+        return Response(output)
